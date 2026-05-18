@@ -20,6 +20,7 @@ const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Discovered Apps', href: '/apps', icon: AppWindow },
   { name: 'Risk Assessments', href: '/risk', icon: ShieldAlert },
+  { name: 'Agent Test', href: '/agent', icon: ShieldAlert },
   { name: 'Users', href: '/users', icon: Users },
   { name: 'Alerts', href: '/alerts', icon: Bell },
   { name: 'Policies', href: '/policies', icon: FileText },
