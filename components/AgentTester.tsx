@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Loader2, ShieldAlert, CheckCircle, HelpCircle } from "lucide-react";
+import { Loader2, ShieldAlert, CheckCircle, HelpCircle, Key } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -36,6 +37,7 @@ const defaultSample = [
 
 export function AgentTester() {
   const [input, setInput] = useState(JSON.stringify(defaultSample, null, 2));
+  const [apiKey, setApiKey] = useState("");
   const [results, setResults] = useState<any[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +64,10 @@ export function AgentTester() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ signals: Array.isArray(parsedSignals) ? parsedSignals : [parsedSignals] }),
+        body: JSON.stringify({ 
+          signals: Array.isArray(parsedSignals) ? parsedSignals : [parsedSignals],
+          apiKey: apiKey || undefined 
+        }),
       });
 
       const data = await response.json();
@@ -110,6 +115,16 @@ export function AgentTester() {
           <CardDescription>
             Provide raw JSON signals from email, OAuth, or DNS logs.
           </CardDescription>
+          <div className="pt-4 flex items-center gap-2">
+            <Key className="w-4 h-4 text-zinc-500" />
+            <Input 
+              type="password" 
+              placeholder="Optional: Enter Groq API Key for live AI generation..." 
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              className="bg-zinc-900/50 border-zinc-800 focus-visible:ring-indigo-500"
+            />
+          </div>
         </CardHeader>
         <CardContent className="flex-1 flex flex-col gap-4">
           <Textarea 

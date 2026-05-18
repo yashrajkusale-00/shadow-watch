@@ -5,12 +5,13 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const signals = body.signals;
+    const clientApiKey = body.apiKey;
 
     if (!signals || !Array.isArray(signals)) {
       return NextResponse.json({ error: 'Invalid payload: signals must be an array' }, { status: 400 });
     }
 
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = clientApiKey || process.env.OPENAI_API_KEY;
 
     if (!apiKey) {
       // Return a mock response if no API key is present
@@ -148,15 +149,15 @@ export async function POST(req: Request) {
       return NextResponse.json(mockResponse);
     }
 
-    // Call OpenAI API
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    // Call Groq API (OpenAI compatible)
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'llama3-70b-8192',
         messages: [
           {
             role: 'system',
