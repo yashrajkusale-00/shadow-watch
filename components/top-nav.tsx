@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { logoutAdmin } from '@/app/actions'
 import { Search, RefreshCw, Bell, Calendar, ChevronDown, Building2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -16,6 +18,13 @@ import { cn } from '@/lib/utils'
 
 export function TopNav() {
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    await logoutAdmin()
+    router.push('/login')
+    router.refresh()
+  }
 
   const handleRefresh = () => {
     setIsRefreshing(true)
@@ -126,7 +135,7 @@ export function TopNav() {
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuItem>Team</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive">Sign out</DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive" onClick={handleLogout}>Sign out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
